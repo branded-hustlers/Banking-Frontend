@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "./components/SideBar.jsx"; // Import from components folder with correct filename
 
 const MainDashboard = ({ user, onLogout }) => {
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+
+    const handleSidebarToggle = (collapsed) => {
+        setSidebarCollapsed(collapsed);
+    };
     return (
         <div className="flex h-screen bg-blue-50">
         {/* Sidebar (fixed positioned) */}
-        <Sidebar user={user} onLogout={onLogout} />
+        <Sidebar user={user} onLogout={onLogout} onSidebarToggle={handleSidebarToggle} />
 
-        {/* Main Content Area (with left margin to account for floating sidebar) */}
-        <div className="flex-1 overflow-y-auto p-6 ml-24">
+        {/* Main Content Area (with dynamic left margin based on sidebar state) */}
+        <div className={`flex-1 overflow-y-auto p-6 transition-all duration-300 ease-in-out ${
+            sidebarCollapsed ? "ml-24" : "ml-72"
+        }`}>
             {/* Top Navigation Bar */}
             <header className="bg-blue-50 rounded-lg p-4 mb-6 flex items-center justify-between">
                 <div className="flex items-center space-x-6">
@@ -28,15 +35,15 @@ const MainDashboard = ({ user, onLogout }) => {
                 <div className="flex items-center space-x-6">
                     <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-1 px-2 py-1 bg-white rounded text-xs text-gray-600">
-                            <span>📊</span>
+                            <span></span>
                             <span>000</span>
                         </div>
                         <div className="flex items-center space-x-1 px-2 py-1 bg-white rounded text-xs text-gray-600">
-                            <span>📅</span>
+                            <span></span>
                             <span>2024-01-22</span>
                         </div>
                         <div className="flex items-center space-x-1 px-2 py-1 bg-white rounded text-xs text-gray-600">
-                            <span>⏰</span>
+                            <span></span>
                             <span>06:00:01</span>
                         </div>
                     </div>
@@ -46,6 +53,7 @@ const MainDashboard = ({ user, onLogout }) => {
                         </span>
                     </div>
                 </div>
+                
             </header>
 
         </div>
