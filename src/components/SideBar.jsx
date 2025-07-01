@@ -6,16 +6,26 @@ import {
     FaUser
     } from "react-icons/fa";
 
-    const Sidebar = ({ user, onLogout }) => {
+    const Sidebar = ({ user, onLogout, onSidebarToggle }) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
+
+    const handleMouseEnter = () => {
+        setIsCollapsed(false);
+        onSidebarToggle?.(false);
+    };
+
+    const handleMouseLeave = () => {
+        setIsCollapsed(true);
+        onSidebarToggle?.(true);
+    };
 
     return (
         <div 
         className={`fixed left-4 top-4 bottom-4 bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col 
             transition-all duration-300 ease-in-out 
             ${isCollapsed ? "w-16" : "w-64"}`}
-        onMouseEnter={() => setIsCollapsed(false)}
-        onMouseLeave={() => setIsCollapsed(true)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         >
         {/* Logo (Centered, icon-only when collapsed) */}
         <div className="mb-6 p-4 flex justify-center">
@@ -24,7 +34,7 @@ import {
                 B
             </div>
             ) : (
-            <div className="h-10 w-auto text-xl font-bold text-gray-800">BankLogo</div>
+            <div className="h-10 w-auto text-xl font-bold text-gray-800">N-Tech</div>
             )}
         </div>
 
