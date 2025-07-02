@@ -5,6 +5,7 @@ export default function ForgotPasswordByUserId({ onBackToLogin, onBackToHome, on
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [focusedField, setFocusedField] = useState('');
 
     const handleInputChange = (e) => {
         setUserId(e.target.value);
@@ -13,6 +14,14 @@ export default function ForgotPasswordByUserId({ onBackToLogin, onBackToHome, on
         if (errors.userId) {
             setErrors({});
         }
+    };
+
+    const handleFocus = (fieldName) => {
+        setFocusedField(fieldName);
+    };
+
+    const handleBlur = () => {
+        setFocusedField('');
     };
 
     const validateForm = () => {
@@ -143,18 +152,26 @@ export default function ForgotPasswordByUserId({ onBackToLogin, onBackToHome, on
                     {/* Form */}
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* User ID Field */}
-                        <div>
+                        <div className="relative">
                             <input
                                 type="text"
                                 name="userId"
                                 value={userId}
                                 onChange={handleInputChange}
-                                placeholder="User ID"
-                                className={`w-full px-4 py-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-gray-400 ${
-                                    errors.userId ? 'border-red-500' : ''
+                                onFocus={() => handleFocus('userId')}
+                                onBlur={handleBlur}
+                                className={`w-full px-4 pt-6 pb-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                                    errors.userId ? 'border-red-500 focus:border-red-500' : 'border-gray-200'
                                 }`}
                                 disabled={isLoading}
                             />
+                            <label className={`absolute left-4 transition-all duration-200 pointer-events-none ${
+                                userId || focusedField === 'userId'
+                                    ? 'top-2 text-xs text-blue-600' 
+                                    : 'top-4 text-base text-gray-400'
+                            }`}>
+                                User ID
+                            </label>
                             {errors.userId && (
                                 <p className="mt-1 text-sm text-red-600">{errors.userId}</p>
                             )}
