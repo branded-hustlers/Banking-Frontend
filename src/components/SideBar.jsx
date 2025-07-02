@@ -27,90 +27,107 @@ import {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         >
-        {/* Logo (Centered, icon-only when collapsed) */}
-        <div className="mb-6 p-4 flex justify-center">
-            {isCollapsed ? (
-            <div className="h-10 w-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+        {/* Logo (B icon with N-Tech text when expanded) */}
+        <div className="mb-6 p-4 flex items-center justify-center">
+            <div className="h-10 w-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                 B
             </div>
-            ) : (
-            <div className="h-10 w-auto text-xl font-bold text-gray-800">N-Tech</div>
+            {!isCollapsed && (
+                <div className="ml-3 text-xl font-bold text-gray-800">N-Tech</div>
             )}
         </div>
 
-        {/* User Info Section */}
-        {!isCollapsed && user && (
-            <div className="mb-6 mx-4 p-3 bg-blue-50 rounded-lg">
-                <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                        {user.userId ? user.userId.charAt(0).toUpperCase() : 'U'}
-                    </div>
-                    <div>
-                        <p className="text-sm font-medium text-gray-800">{user.userId || 'User'}</p>
-                        <p className="text-xs text-gray-500">Customer</p>
-                    </div>
+
+
+        {/* Scrollable Content Area */}
+        <div className="flex-1 overflow-y-auto">
+            {/* Directory Section */}
+            <div className="mb-6 px-4">
+                {!isCollapsed && (
+                <h3 className="text-xs font-semibold uppercase tracking-wider mb-2 px-2" style={{ color: '#A0A0A0' }}>
+                    Directory
+                </h3>
+                )}
+                <div className="space-y-1">
+                {[
+                    { name: "Home", icon: <FaHome /> },
+                    { name: "Interactions", icon: <FaExchangeAlt /> },
+                    { name: "Customer", icon: <FaUser /> },
+                    { name: "Workflow", icon: <FaProjectDiagram /> },
+                    { name: "Tasks", icon: <FaTasks /> },
+                    { name: "Preferences", icon: <FaStar /> },
+                ].map((item) => (
+                    <button
+                    key={item.name}
+                    className="w-full flex items-center p-2 text-sm rounded-md transition-colors group"
+                    style={{ color: '#A0A0A0' }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#005B96';
+                        e.currentTarget.style.backgroundColor = '#D8ECF9';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#A0A0A0';
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
+                    >
+                    <span className="text-lg" style={{ color: 'inherit' }}>{item.icon}</span>
+                    {!isCollapsed && <span className="ml-3" style={{ color: 'inherit' }}>{item.name}</span>}
+                    </button>
+                ))}
                 </div>
             </div>
-        )}
 
-        {/* Directory Section */}
-        <div className="mb-6 px-4">
-            {!isCollapsed && (
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-2">
-                Directory
-            </h3>
-            )}
-            <div className="space-y-1">
-            {[
-                { name: "Home", icon: <FaHome /> },
-                { name: "Interactions", icon: <FaExchangeAlt /> },
-                { name: "Customer", icon: <FaUser /> },
-                { name: "Workflow", icon: <FaProjectDiagram /> },
-                { name: "Tasks", icon: <FaTasks /> },
-                { name: "Preferences", icon: <FaStar /> },
-            ].map((item) => (
-                <button
-                key={item.name}
-                className="w-full flex items-center p-2 text-sm rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
-                >
-                <span className="text-lg">{item.icon}</span>
-                {!isCollapsed && <span className="ml-3">{item.name}</span>}
-                </button>
-            ))}
+            {/* Recents Section */}
+            <div className="mb-6 px-4">
+                {!isCollapsed && (
+                <h3 className="text-xs font-semibold uppercase tracking-wider mb-2 px-2" style={{ color: '#A0A0A0' }}>
+                    Recents
+                </h3>
+                )}
+                <div className="space-y-1">
+                {[
+                    { name: "Savings", icon: <FaPiggyBank /> },
+                    { name: "Vault Operations", icon: <FaWarehouse /> },
+                    { name: "Batches", icon: <FaBoxes /> },
+                ].map((item) => (
+                    <button
+                    key={item.name}
+                    className="w-full flex items-center p-2 text-sm rounded-md transition-colors group"
+                    style={{ color: '#A0A0A0' }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#005B96';
+                        e.currentTarget.style.backgroundColor = '#D8ECF9';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#A0A0A0';
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
+                    >
+                    <span className="text-lg" style={{ color: 'inherit' }}>{item.icon}</span>
+                    {!isCollapsed && <span className="ml-3" style={{ color: 'inherit' }}>{item.name}</span>}
+                    </button>
+                ))}
+                </div>
             </div>
         </div>
 
-        {/* Recents Section */}
-        <div className="mb-6 px-4">
-            {!isCollapsed && (
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-2">
-                Recents
-            </h3>
-            )}
-            <div className="space-y-1">
-            {[
-                { name: "Savings", icon: <FaPiggyBank /> },
-                { name: "Vault Operations", icon: <FaWarehouse /> },
-                { name: "Batches", icon: <FaBoxes /> },
-            ].map((item) => (
-                <button
-                key={item.name}
-                className="w-full flex items-center p-2 text-sm rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
-                >
-                <span className="text-lg">{item.icon}</span>
-                {!isCollapsed && <span className="ml-3">{item.name}</span>}
-                </button>
-            ))}
-            </div>
-        </div>
-
-        {/* Bottom Buttons */}
-        <div className="mt-auto p-4 space-y-1">
-            <button className="w-full flex items-center p-2 text-sm rounded-md text-gray-700 hover:bg-gray-100 transition-colors">
-                <FaCog className="text-lg" />
-                {!isCollapsed && <span className="ml-3">Settings</span>}
+        {/* Fixed Bottom Settings Button */}
+        <div className="flex-shrink-0 p-4 border-t border-gray-100">
+            <button 
+                className="w-full flex items-center p-2 text-sm rounded-md transition-colors"
+                style={{ color: '#A0A0A0' }}
+                onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#005B96';
+                    e.currentTarget.style.backgroundColor = '#D8ECF9';
+                }}
+                onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '#A0A0A0';
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                }}
+            >
+                <FaCog className="text-lg" style={{ color: 'inherit' }} />
+                {!isCollapsed && <span className="ml-3" style={{ color: 'inherit' }}>Settings</span>}
             </button>
-            
         </div>
         </div>
     );
