@@ -45,6 +45,7 @@ const MainDashboard = ({ user, onLogout }) => {
         <div className={`flex-1 overflow-y-auto p-6 transition-all duration-300 ease-in-out ${
             sidebarCollapsed ? "ml-24" : "ml-72"
         }`}>
+        
             {/* Top Navigation Bar */}
             <header className="bg-blue-50 rounded-lg p-4 mb-6 flex items-center justify-between">
                 <div className="flex items-center space-x-6">
@@ -72,6 +73,8 @@ const MainDashboard = ({ user, onLogout }) => {
                             <span>06:00:01</span>
                         </div>
                     </div>
+
+
                     
                     {/* Profile Dropdown */}
                     <div className="relative" ref={dropdownRef}>
@@ -150,6 +153,120 @@ const MainDashboard = ({ user, onLogout }) => {
                 </div>
                 
             </header>
+
+            {/* Banking Services Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* GCB MTO Products */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <span className="text-yellow-600 font-bold text-lg">GCB</span>
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>GCB MTO Products</h3>
+                    <p className="text-sm text-gray-600">
+                        Manage and track GCB MTO products seamlessly within the banking system. 
+                        GCB your bank for life.
+                    </p>
+                </div>
+
+                {/* Unity Link(OTC) */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <span className="text-blue-600 font-bold text-lg">UL</span>
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>Unity Link(OTC)</h3>
+                    <p className="text-sm text-gray-600">
+                        Seamless Unity transactions, OTC Direct to Account, and Wallet transfers 
+                        all in one place.
+                    </p>
+                </div>
+
+                {/* RIA(OTC & Direct to Account) */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <span className="text-purple-600 font-bold text-lg">Ria</span>
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>RIA(OTC & Direct to Account)</h3>
+                    <p className="text-sm text-gray-600">
+                        Manage and track GCB MTO products seamlessly within the banking system. 
+                        GCB your bank for life.
+                    </p>
+                </div>
+
+                {/* Western Union(OTC) */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <span className="text-yellow-600 font-bold text-lg">WU</span>
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>Western Union(OTC)</h3>
+                    <p className="text-sm text-gray-600">
+                        Manage and track GCB MTO products seamlessly within the banking system. 
+                        GCB your bank for life.
+                    </p>
+                </div>
+
+                {/* REMIT on EAGLE PAY */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <span className="text-blue-600 font-bold text-lg">EP</span>
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>REMIT on EAGLE PAY</h3>
+                    <p className="text-sm text-gray-600">
+                        Manage your money and money exchange eagle pay.
+                    </p>
+                </div>
+
+                {/* A.O.B */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <span className="text-orange-600 font-bold text-lg">AOB</span>
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>A.O.B</h3>
+                    <p className="text-sm text-gray-600">
+                        Manage and track GCB MTO products seamlessly within the banking system. 
+                        GCB your bank for life.
+                    </p>
+                </div>
+
+                {/* MoneyGram(OTC) */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <span className="text-red-600 font-bold text-lg">MG</span>
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>MoneyGram(OTC)</h3>
+                    <p className="text-sm text-gray-600">
+                        Manage and track GCB MTO products seamlessly within the banking 
+                        system for your money transfers.
+                    </p>
+                </div>
+
+                {/* Transfast(OTC & Other Banks) */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <span className="text-green-600 font-bold text-lg">TF</span>
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>Transfast(OTC & Other Banks)</h3>
+                    <p className="text-sm text-gray-600">
+                        Manage and track GCB MTO products seamlessly within the banking 
+                        system and other banks.
+                    </p>
+                </div>
+            </div>
 
         </div>
         </div>
