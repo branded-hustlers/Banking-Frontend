@@ -158,7 +158,7 @@ const MainDashboard = ({ user, onLogout }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* GCB MTO Products */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
                             <span className="text-yellow-600 font-bold text-lg">GCB</span>
                         </div>
@@ -172,7 +172,7 @@ const MainDashboard = ({ user, onLogout }) => {
 
                 {/* Unity Link(OTC) */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                             <span className="text-blue-600 font-bold text-lg">UL</span>
                         </div>
@@ -186,7 +186,7 @@ const MainDashboard = ({ user, onLogout }) => {
 
                 {/* RIA(OTC & Direct to Account) */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                             <span className="text-purple-600 font-bold text-lg">Ria</span>
                         </div>
@@ -200,7 +200,7 @@ const MainDashboard = ({ user, onLogout }) => {
 
                 {/* Western Union(OTC) */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
                             <span className="text-yellow-600 font-bold text-lg">WU</span>
                         </div>
@@ -214,7 +214,7 @@ const MainDashboard = ({ user, onLogout }) => {
 
                 {/* REMIT on EAGLE PAY */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                             <span className="text-blue-600 font-bold text-lg">EP</span>
                         </div>
@@ -227,7 +227,7 @@ const MainDashboard = ({ user, onLogout }) => {
 
                 {/* A.O.B */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                             <span className="text-orange-600 font-bold text-lg">AOB</span>
                         </div>
@@ -241,7 +241,7 @@ const MainDashboard = ({ user, onLogout }) => {
 
                 {/* MoneyGram(OTC) */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                             <span className="text-red-600 font-bold text-lg">MG</span>
                         </div>
@@ -255,7 +255,7 @@ const MainDashboard = ({ user, onLogout }) => {
 
                 {/* Transfast(OTC & Other Banks) */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                             <span className="text-green-600 font-bold text-lg">TF</span>
                         </div>
