@@ -160,7 +160,21 @@ const MainDashboard = ({ user, onLogout }) => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                            <span className="text-yellow-600 font-bold text-lg">GCB</span>
+                            <img 
+                                src="/assets/logos/gcb-logo.svg" 
+                                alt="GCB" 
+                                className="w-8 h-8 object-contain"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'block';
+                                }}
+                            />
+                            <span 
+                                className="text-yellow-600 font-bold text-lg" 
+                                style={{ display: 'none' }}
+                            >
+                                GCB
+                            </span>
                         </div>
                     </div>
                     <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>GCB MTO Products</h3>
@@ -174,7 +188,21 @@ const MainDashboard = ({ user, onLogout }) => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <span className="text-blue-600 font-bold text-lg">UL</span>
+                            <img 
+                                src="/assets/logos/unity-link-logo.svg" 
+                                alt="Unity Link" 
+                                className="w-8 h-8 object-contain"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'block';
+                                }}
+                            />
+                            <span 
+                                className="text-blue-600 font-bold text-lg" 
+                                style={{ display: 'none' }}
+                            >
+                                UL
+                            </span>
                         </div>
                     </div>
                     <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>Unity Link(OTC)</h3>
@@ -188,7 +216,21 @@ const MainDashboard = ({ user, onLogout }) => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                            <span className="text-purple-600 font-bold text-lg">Ria</span>
+                            <img 
+                                src="/assets/logos/ria-logo.svg" 
+                                alt="RIA" 
+                                className="w-8 h-8 object-contain"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'block';
+                                }}
+                            />
+                            <span 
+                                className="text-purple-600 font-bold text-lg" 
+                                style={{ display: 'none' }}
+                            >
+                                Ria
+                            </span>
                         </div>
                     </div>
                     <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>RIA(OTC & Direct to Account)</h3>
@@ -202,7 +244,21 @@ const MainDashboard = ({ user, onLogout }) => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                            <span className="text-yellow-600 font-bold text-lg">WU</span>
+                            <img 
+                                src="/assets/logos/western-union-logo.svg" 
+                                alt="Western Union" 
+                                className="w-8 h-8 object-contain"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'block';
+                                }}
+                            />
+                            <span 
+                                className="text-yellow-600 font-bold text-lg" 
+                                style={{ display: 'none' }}
+                            >
+                                WU
+                            </span>
                         </div>
                     </div>
                     <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>Western Union(OTC)</h3>
@@ -216,7 +272,21 @@ const MainDashboard = ({ user, onLogout }) => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <span className="text-blue-600 font-bold text-lg">EP</span>
+                            <img 
+                                src="/assets/logos/eagle-pay-logo.svg" 
+                                alt="Eagle Pay" 
+                                className="w-8 h-8 object-contain"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'block';
+                                }}
+                            />
+                            <span 
+                                className="text-blue-600 font-bold text-lg" 
+                                style={{ display: 'none' }}
+                            >
+                                EP
+                            </span>
                         </div>
                     </div>
                     <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>REMIT on EAGLE PAY</h3>
@@ -229,7 +299,21 @@ const MainDashboard = ({ user, onLogout }) => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                            <span className="text-orange-600 font-bold text-lg">AOB</span>
+                            <img 
+                                src="/assets/logos/aob-logo.svg" 
+                                alt="A.O.B" 
+                                className="w-8 h-8 object-contain"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'block';
+                                }}
+                            />
+                            <span 
+                                className="text-orange-600 font-bold text-lg" 
+                                style={{ display: 'none' }}
+                            >
+                                AOB
+                            </span>
                         </div>
                     </div>
                     <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>A.O.B</h3>
@@ -243,7 +327,21 @@ const MainDashboard = ({ user, onLogout }) => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                            <span className="text-red-600 font-bold text-lg">MG</span>
+                            <img 
+                                src="/assets/logos/moneygram-logo.svg" 
+                                alt="MoneyGram" 
+                                className="w-8 h-8 object-contain"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'block';
+                                }}
+                            />
+                            <span 
+                                className="text-red-600 font-bold text-lg" 
+                                style={{ display: 'none' }}
+                            >
+                                MG
+                            </span>
                         </div>
                     </div>
                     <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>MoneyGram(OTC)</h3>
@@ -257,7 +355,21 @@ const MainDashboard = ({ user, onLogout }) => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                            <span className="text-green-600 font-bold text-lg">TF</span>
+                            <img 
+                                src="/assets/logos/transfast-logo.svg" 
+                                alt="Transfast" 
+                                className="w-8 h-8 object-contain"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'block';
+                                }}
+                            />
+                            <span 
+                                className="text-green-600 font-bold text-lg" 
+                                style={{ display: 'none' }}
+                            >
+                                TF
+                            </span>
                         </div>
                     </div>
                     <h3 className="text-lg font-semibold mb-2" style={{ color: '#005B96' }}>Transfast(OTC & Other Banks)</h3>
