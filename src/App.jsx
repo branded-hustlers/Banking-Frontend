@@ -3,6 +3,7 @@ import Login from "./Login.jsx";
 import ForgotPassword from "./ForgotPassword.jsx";
 import ForgotPasswordByUserId from "./ForgotPasswordByUserId.jsx";
 import MainDashboard from "./MainDashboard.jsx";
+import Overview from "./Overview.jsx";
 
 export default function App() {
     const [currentPage, setCurrentPage] = useState('home');
@@ -21,6 +22,16 @@ export default function App() {
     const handleLogout = () => {
         setUser(null);
         setCurrentPage('home');
+    };
+
+    const handleNavigate = (page) => {
+        if (page === 'dashboard') {
+            setCurrentPage('dashboard');
+        } else if (page === 'overview') {
+            setCurrentPage('overview');
+        } else if (page === 'reports') {
+            setCurrentPage('reports');
+        }
     };
 
     // Render Login Page
@@ -62,6 +73,18 @@ export default function App() {
             <MainDashboard 
                 user={user}
                 onLogout={handleLogout}
+                onNavigate={handleNavigate}
+            />
+        );
+    }
+
+    // Render Overview Page
+    if (currentPage === 'overview') {
+        return (
+            <Overview 
+                user={user}
+                onLogout={handleLogout}
+                onNavigate={handleNavigate}
             />
         );
     }

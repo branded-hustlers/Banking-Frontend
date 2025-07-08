@@ -5,6 +5,7 @@ export default function ForgotPassword({ onBackToLogin, onBackToHome, onTryAnoth
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [focusedField, setFocusedField] = useState('');
 
     const handleInputChange = (e) => {
         setEmail(e.target.value);
@@ -13,6 +14,14 @@ export default function ForgotPassword({ onBackToLogin, onBackToHome, onTryAnoth
         if (errors.email) {
             setErrors({});
         }
+    };
+
+    const handleFocus = (fieldName) => {
+        setFocusedField(fieldName);
+    };
+
+    const handleBlur = () => {
+        setFocusedField('');
     };
 
     const validateForm = () => {
@@ -143,18 +152,26 @@ export default function ForgotPassword({ onBackToLogin, onBackToHome, onTryAnoth
                     {/* Form */}
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Email Field */}
-                        <div>
+                        <div className="relative">
                             <input
                                 type="email"
                                 name="email"
                                 value={email}
                                 onChange={handleInputChange}
-                                placeholder="Email address"
-                                className={`w-full px-4 py-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-gray-400 ${
-                                    errors.email ? 'border-red-500' : ''
+                                onFocus={() => handleFocus('email')}
+                                onBlur={handleBlur}
+                                className={`w-full px-4 pt-6 pb-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                                    errors.email ? 'border-red-500 focus:border-red-500' : 'border-gray-200'
                                 }`}
                                 disabled={isLoading}
                             />
+                            <label className={`absolute left-4 transition-all duration-200 pointer-events-none ${
+                                email || focusedField === 'email'
+                                    ? 'top-2 text-xs text-blue-600' 
+                                    : 'top-4 text-base text-gray-400'
+                            }`}>
+                                Email address
+                            </label>
                             {errors.email && (
                                 <p className="mt-1 text-sm text-red-600">{errors.email}</p>
                             )}
