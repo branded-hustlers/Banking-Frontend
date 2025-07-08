@@ -1,17 +1,217 @@
 import React, { useState, useRef, useEffect } from "react";
 import Sidebar from "./components/SideBar.jsx";
 import TopNavigation from "./components/TopNavigation.jsx";
+import { FaUsers, FaUserTie, FaUniversity, FaUserPlus } from "react-icons/fa";
+
+// Users Sidebar Component
+const UsersSidebar = ({ user, onLogout, onSidebarToggle, selectedFilter, onFilterSelect }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [hoverTimeout, setHoverTimeout] = useState(null);
+
+    const handleMouseEnter = () => {
+        if (hoverTimeout) clearTimeout(hoverTimeout);
+        const timeout = setTimeout(() => {
+            setIsExpanded(true);
+            onSidebarToggle(false);
+        }, 200);
+        setHoverTimeout(timeout);
+    };
+
+    const handleMouseLeave = () => {
+        if (hoverTimeout) clearTimeout(hoverTimeout);
+        const timeout = setTimeout(() => {
+            setIsExpanded(false);
+            onSidebarToggle(true);
+        }, 200);
+        setHoverTimeout(timeout);
+    };
+
+    const usersFilterOptions = [
+        { id: 'all', label: 'All Users', icon: <FaUsers /> },
+        { id: 'staff', label: 'Staff', icon: <FaUserTie /> },
+        { id: 'accountHolders', label: 'Account Holders', icon: <FaUniversity /> },
+        { id: 'recentlyRegistered', label: 'Recently Registered', icon: <FaUserPlus /> }
+    ];
+
+    return (
+        <div 
+            className={`fixed left-4 top-4 bottom-4 bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col 
+                transition-all duration-300 ease-in-out 
+                ${isExpanded ? "w-64" : "w-16"}`}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            {/* Logo/Header */}
+            <div className="mb-6 p-4 flex items-center justify-center">
+                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    U
+                </div>
+                {isExpanded && (
+                    <div className="ml-3 text-xl font-bold text-gray-800">Users</div>
+                )}
+            </div>
+
+            {/* Scrollable Content Area */}
+            <div className="flex-1 overflow-y-auto">
+                {/* Filter Options */}
+                <div className="mb-6 px-4">
+                    {isExpanded && (
+                        <h3 className="text-xs font-semibold uppercase tracking-wider mb-2 px-2" style={{ color: '#A0A0A0' }}>
+                            User Filters
+                        </h3>
+                    )}
+                    <div className="space-y-1">
+                        {usersFilterOptions.map((option) => (
+                            <button
+                                key={option.id}
+                                onClick={() => onFilterSelect(option.label)}
+                                className={`w-full flex items-center p-2 text-sm rounded-md transition-colors group ${
+                                    selectedFilter === option.label
+                                        ? 'text-blue-700 bg-blue-100'
+                                        : 'text-gray-500'
+                                }`}
+                                style={{ 
+                                    color: selectedFilter === option.label ? '#005B96' : '#A0A0A0',
+                                    backgroundColor: selectedFilter === option.label ? '#D8ECF9' : 'transparent'
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (selectedFilter !== option.label) {
+                                        e.currentTarget.style.color = '#005B96';
+                                        e.currentTarget.style.backgroundColor = '#D8ECF9';
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (selectedFilter !== option.label) {
+                                        e.currentTarget.style.color = '#A0A0A0';
+                                        e.currentTarget.style.backgroundColor = 'transparent';
+                                    }
+                                }}
+                            >
+                                <span className="text-lg" style={{ color: 'inherit' }}>{option.icon}</span>
+                                {isExpanded && (
+                                    <span className="ml-3" style={{ color: 'inherit' }}>{option.label}</span>
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Logout Button */}
+            <div className="p-4">
+                <button
+                    onClick={onLogout}
+                    className="w-full flex items-center p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
+                    style={{ color: '#A0A0A0' }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#dc2626';
+                        e.currentTarget.style.backgroundColor = '#fef2f2';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#A0A0A0';
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
+                >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'inherit' }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    {isExpanded && (
+                        <span className="ml-3 text-sm" style={{ color: 'inherit' }}>Logout</span>
+                    )}
+                </button>
+            </div>
+        </div>
+    );
+};
 
 const Overview = ({ user, onLogout, onNavigate }) => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+    const [usersSidebarCollapsed, setUsersSidebarCollapsed] = useState(true);
     const [searchModalOpen, setSearchModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
     const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+    const [filterModalOpen, setFilterModalOpen] = useState(false);
+    const [selectedUsersFilter, setSelectedUsersFilter] = useState('All Users');
+    const [rowsPerPage, setRowsPerPage] = useState(7);
+    const [filterOptions, setFilterOptions] = useState({
+        users: {
+            staff: false,
+            accountHolders: false,
+            recentlyRegistered: false
+        },
+        status: {
+            activeUsers: false,
+            suspendedUsers: false,
+            blacklistedUsers: false,
+            pendingUsers: false
+        },
+        departments: {
+            executiveManagement: false,
+            customerServiceFrontOffice: false,
+            loansCredit: false,
+            salesMarketing: false,
+            productStrategy: false,
+            riskAuditCompliance: false,
+            itSystems: false,
+            transactionProcessingBackOffice: false,
+            internationalBanking: false,
+            accountManagement: false
+        }
+    });
     const searchModalRef = useRef(null);
     const sortDropdownRef = useRef(null);
+    const filterModalRef = useRef(null);
 
     const handleSidebarToggle = (collapsed) => {
         setSidebarCollapsed(collapsed);
+    };
+
+    const handleUsersSidebarToggle = (collapsed) => {
+        setUsersSidebarCollapsed(collapsed);
+    };
+
+    const handleUsersFilterSelect = (filter) => {
+        setSelectedUsersFilter(filter);
+    };
+
+    const handleRowsPerPageChange = (e) => {
+        setRowsPerPage(parseInt(e.target.value));
+    };
+
+    // Sample users data
+    const usersData = [
+        { id: "102403008556", name: "Quateah, Ewuraba", role: "Super Admin", branch: "Kumasi Branch", status: "Active", email: "ewurabaquateah@gmail.com", phone: "0500877524" },
+        { id: "102401923617", name: "Agyeman, Kwame", role: "Account Holder", branch: "Kumasi Branch", status: "Active", email: "kwameagyeman@gmail.com", phone: "0501234567" },
+        { id: "192229376812", name: "Mensah, Akosua", role: "System Administrator", branch: "Kumasi Branch", status: "Active", email: "akosuamensah@gcb.com.gh", phone: "0567654321" },
+        { id: "103407412540", name: "Boateng, Michael", role: "Account Holder", branch: "Kumasi Branch", status: "Active", email: "michaelboateng78@gmail.com", phone: "0247896541" },
+        { id: "180788269541", name: "Owusu, Lydia", role: "Auditor", branch: "Takoradi Branch", status: "Blacklisted", email: "lydiaowusu@gcb.com.gh", phone: "0550012345" },
+        { id: "174449184532", name: "Frimpong, Nana Yaw", role: "Teller", branch: "Tamale Branch", status: "Active", email: "nanayawfrimpong@gcb.com.gh", phone: "0201122334" },
+        { id: "165019376124", name: "Dankwa, Grace", role: "Software Developer", branch: "Tamale Branch", status: "Active", email: "gracedankwa@gcb.com.gh", phone: "0509988776" },
+        { id: "156789432112", name: "Asante, Kofi", role: "Manager", branch: "Accra Branch", status: "Active", email: "kofiasante@gcb.com.gh", phone: "0244567890" },
+        { id: "143256789098", name: "Adjei, Ama", role: "Customer Service", branch: "Tema Branch", status: "Active", email: "amaadjei@gcb.com.gh", phone: "0266789012" },
+        { id: "198765432156", name: "Osei, Samuel", role: "Account Holder", branch: "Cape Coast Branch", status: "Suspended", email: "samuelosei@gmail.com", phone: "0277890123" }
+    ];
+
+    // Get displayed users based on rowsPerPage
+    const displayedUsers = usersData.slice(0, rowsPerPage);
+
+    // Helper function to render status badge
+    const renderStatusBadge = (status) => {
+        const statusConfig = {
+            'Active': { bgColor: 'bg-green-100', textColor: 'text-green-800', dotColor: 'bg-green-500' },
+            'Blacklisted': { bgColor: 'bg-red-100', textColor: 'text-red-800', dotColor: 'bg-red-500' },
+            'Suspended': { bgColor: 'bg-yellow-100', textColor: 'text-yellow-800', dotColor: 'bg-yellow-500' },
+            'Pending': { bgColor: 'bg-gray-100', textColor: 'text-gray-800', dotColor: 'bg-gray-500' }
+        };
+
+        const config = statusConfig[status] || statusConfig['Active'];
+
+        return (
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bgColor} ${config.textColor}`}>
+                <div className={`w-2 h-2 ${config.dotColor} rounded-full mr-1`}></div>
+                {status}
+            </span>
+        );
     };
 
     const openSearchModal = () => {
@@ -28,6 +228,58 @@ const Overview = ({ user, onLogout, onNavigate }) => {
 
     const closeSortDropdown = () => {
         setSortDropdownOpen(false);
+    };
+
+    const openFilterModal = () => {
+        setFilterModalOpen(true);
+    };
+
+    const closeFilterModal = () => {
+        setFilterModalOpen(false);
+    };
+
+    const handleFilterChange = (category, option) => {
+        setFilterOptions(prev => ({
+            ...prev,
+            [category]: {
+                ...prev[category],
+                [option]: !prev[category][option]
+            }
+        }));
+    };
+
+    const applyFilters = () => {
+        console.log('Applying filters:', filterOptions);
+        // Here you can implement the actual filtering logic
+        closeFilterModal();
+    };
+
+    const clearFilters = () => {
+        setFilterOptions({
+            users: {
+                staff: false,
+                accountHolders: false,
+                recentlyRegistered: false
+            },
+            status: {
+                activeUsers: false,
+                suspendedUsers: false,
+                blacklistedUsers: false,
+                pendingUsers: false
+            },
+            departments: {
+                executiveManagement: false,
+                customerServiceFrontOffice: false,
+                loansCredit: false,
+                salesMarketing: false,
+                productStrategy: false,
+                riskAuditCompliance: false,
+                itSystems: false,
+                transactionProcessingBackOffice: false,
+                internationalBanking: false,
+                accountManagement: false
+            }
+        });
     };
 
     const handleSortOption = (option) => {
@@ -52,12 +304,16 @@ const Overview = ({ user, onLogout, onNavigate }) => {
             if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target)) {
                 setSortDropdownOpen(false);
             }
+            if (filterModalRef.current && !filterModalRef.current.contains(event.target)) {
+                setFilterModalOpen(false);
+            }
         };
 
         const handleEscapeKey = (event) => {
             if (event.key === 'Escape') {
                 setSearchModalOpen(false);
                 setSortDropdownOpen(false);
+                setFilterModalOpen(false);
             }
         };
 
@@ -72,11 +328,23 @@ const Overview = ({ user, onLogout, onNavigate }) => {
     return (
         <div className="flex h-screen bg-blue-50">
             {/* Sidebar */}
-            <Sidebar user={user} onLogout={onLogout} onSidebarToggle={handleSidebarToggle} />
+            {activeTab === 'users' ? (
+                <UsersSidebar 
+                    user={user} 
+                    onLogout={onLogout} 
+                    onSidebarToggle={handleUsersSidebarToggle}
+                    selectedFilter={selectedUsersFilter}
+                    onFilterSelect={handleUsersFilterSelect}
+                />
+            ) : (
+                <Sidebar user={user} onLogout={onLogout} onSidebarToggle={handleSidebarToggle} />
+            )}
 
             {/* Main Content Area */}
             <div className={`flex-1 overflow-y-auto p-6 transition-all duration-300 ease-in-out ${
-                sidebarCollapsed ? "ml-24" : "ml-72"
+                activeTab === 'users' 
+                    ? (usersSidebarCollapsed ? "ml-24" : "ml-72")
+                    : (sidebarCollapsed ? "ml-24" : "ml-72")
             }`}>
                 
                 {/* Top Navigation Bar */}
@@ -567,17 +835,36 @@ const Overview = ({ user, onLogout, onNavigate }) => {
                         {/* Users Page Header */}
                         <div className="mb-6">
                             <div className="flex justify-between items-center mb-4">
+                                <div className="flex items-center space-x-4">
+                                    <h2 className="text-xl font-semibold text-gray-800">{selectedUsersFilter}</h2>
+                                    <span className="text-sm text-gray-500">
+                                        {selectedUsersFilter === 'All Users' ? 'Showing all users in the system' :
+                                        selectedUsersFilter === 'Staff' ? 'Showing staff members only' :
+                                        selectedUsersFilter === 'Account Holders' ? 'Showing account holders only' :
+                                        'Showing recently registered users'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="flex justify-between items-center mb-4">
                             <div className="flex items-center space-x-2">
                                 <span className="text-sm text-gray-600">Rows</span>
-                                <select className="border border-gray-300 rounded px-2 py-1 text-sm">
-                                    <option>7</option>
-                                    <option>10</option>
-                                    <option>25</option>
-                                    <option>50</option>
+                                <select 
+                                    value={rowsPerPage} 
+                                    onChange={handleRowsPerPageChange}
+                                    className="border border-gray-300 rounded px-2 py-1 text-sm"
+                                >
+                                    <option value={3}>3</option>
+                                    <option value={5}>5</option>
+                                    <option value={7}>7</option>
+                                    <option value={10}>10</option>
+                                    <option value={15}>15</option>
                                 </select>
                             </div>
                                 <div className="flex items-center space-x-2">
-                                    <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                                    <button 
+                                        onClick={openFilterModal}
+                                        className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                                    >
                                         Filter
                                     </button>
                                     <div className="relative" ref={sortDropdownRef}>
@@ -659,153 +946,26 @@ const Overview = ({ user, onLogout, onNavigate }) => {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">102403008556</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Quateah, Ewuraba</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Super Admin</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Kumasi Branch</td>
-                                        <td className="px-4 py-3 whitespace-nowrap">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                                                Active
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">ewurabaquateah@gmail.com</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0500877524</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
-                                            <button className="text-blue-600 hover:text-blue-900">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">102401923617</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Agyeman, Kwame</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Account Holder</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Kumasi Branch</td>
-                                        <td className="px-4 py-3 whitespace-nowrap">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                                                Active
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">kwameagyeman@gmail.com</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0501234567</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
-                                            <button className="text-blue-600 hover:text-blue-900">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">192229376812</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Mensah, Akosua</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">System Administrator</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Kumasi Branch</td>
-                                        <td className="px-4 py-3 whitespace-nowrap">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                                                Active
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">akosuamensah@gcb.com.gh</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0567654321</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
-                                            <button className="text-blue-600 hover:text-blue-900">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">103407412540</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Boateng, Michael</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Account Holder</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Kumasi Branch</td>
-                                        <td className="px-4 py-3 whitespace-nowrap">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                                                Active
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">michaelboateng78@gmail.com</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0247896541</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
-                                            <button className="text-blue-600 hover:text-blue-900">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">180788269541</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Owusu, Lydia</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Auditor</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Takoradi Branch</td>
-                                        <td className="px-4 py-3 whitespace-nowrap">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                <div className="w-2 h-2 bg-red-500 rounded-full mr-1"></div>
-                                                Blacklisted
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">lydiaowusu@gcb.com.gh</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0550012345</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
-                                            <button className="text-blue-600 hover:text-blue-900">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">174449184532</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Frimpong, Nana Yaw</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Teller</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Tamale Branch</td>
-                                        <td className="px-4 py-3 whitespace-nowrap">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                                                Active
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">nanayawfrimpong@gcb.com.gh</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0201122334</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
-                                            <button className="text-blue-600 hover:text-blue-900">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">165019376124</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Dankwa, Grace</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Software Developer</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Tamale Branch</td>
-                                        <td className="px-4 py-3 whitespace-nowrap">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                                                Active
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">gracedankwa@gcb.com.gh</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0509988776</td>
-                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
-                                            <button className="text-blue-600 hover:text-blue-900">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    {displayedUsers.map((user, index) => (
+                                        <tr key={user.id}>
+                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.id}</td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.name}</td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.role}</td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.branch}</td>
+                                            <td className="px-4 py-3 whitespace-nowrap">
+                                                {renderStatusBadge(user.status)}
+                                            </td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.email}</td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.phone}</td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                                <button className="text-blue-600 hover:text-blue-900">
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                    </svg>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
@@ -813,7 +973,7 @@ const Overview = ({ user, onLogout, onNavigate }) => {
                         {/* Pagination */}
                         <div className="flex items-center justify-between mt-6">
                             <div className="text-sm text-gray-700">
-                                Showing 1 - 7 of 2,956 results
+                                Showing 1 - {displayedUsers.length} of {usersData.length} results
                             </div>
                             <div className="flex items-center space-x-2">
                                 <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50">
@@ -903,6 +1063,219 @@ const Overview = ({ user, onLogout, onNavigate }) => {
                                     Find sub banking systems by name and add them to your<br />
                                     homescreen for easy access
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Filter Modal */}
+                {filterModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                        <div ref={filterModalRef} className="bg-white rounded-lg shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto relative">
+                            {/* Modal Header */}
+                            <div className="flex justify-between items-center p-4 border-b border-gray-200">
+                                <h2 className="text-lg font-semibold text-gray-800">Filter</h2>
+                                <button
+                                    onClick={closeFilterModal}
+                                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            {/* Modal Content */}
+                            <div className="p-4 space-y-4">
+                                {/* Filter by Users */}
+                                <div>
+                                    <h3 className="text-sm font-medium text-gray-700 mb-3">Filter by Users</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.users.staff}
+                                                onChange={() => handleFilterChange('users', 'staff')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Staff</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.users.accountHolders}
+                                                onChange={() => handleFilterChange('users', 'accountHolders')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Account Holders</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.users.recentlyRegistered}
+                                                onChange={() => handleFilterChange('users', 'recentlyRegistered')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Recently Registered</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {/* Filter by Status */}
+                                <div>
+                                    <h3 className="text-sm font-medium text-gray-700 mb-3">Filter by Status</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.status.activeUsers}
+                                                onChange={() => handleFilterChange('status', 'activeUsers')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Active Users</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.status.suspendedUsers}
+                                                onChange={() => handleFilterChange('status', 'suspendedUsers')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Suspended Users</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.status.blacklistedUsers}
+                                                onChange={() => handleFilterChange('status', 'blacklistedUsers')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Blacklisted Users</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.status.pendingUsers}
+                                                onChange={() => handleFilterChange('status', 'pendingUsers')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Pending Users</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {/* Filter by Departments */}
+                                <div>
+                                    <h3 className="text-sm font-medium text-gray-700 mb-3">Filter by Departments</h3>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.departments.executiveManagement}
+                                                onChange={() => handleFilterChange('departments', 'executiveManagement')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Executive & Management</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.departments.customerServiceFrontOffice}
+                                                onChange={() => handleFilterChange('departments', 'customerServiceFrontOffice')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Customer Service & Front Office</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.departments.loansCredit}
+                                                onChange={() => handleFilterChange('departments', 'loansCredit')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Loans & Credit</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.departments.salesMarketing}
+                                                onChange={() => handleFilterChange('departments', 'salesMarketing')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Sales & Marketing</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.departments.productStrategy}
+                                                onChange={() => handleFilterChange('departments', 'productStrategy')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Product & Strategy</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.departments.riskAuditCompliance}
+                                                onChange={() => handleFilterChange('departments', 'riskAuditCompliance')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Risk, Audit & Compliance</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.departments.itSystems}
+                                                onChange={() => handleFilterChange('departments', 'itSystems')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">IT & Systems</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.departments.transactionProcessingBackOffice}
+                                                onChange={() => handleFilterChange('departments', 'transactionProcessingBackOffice')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Transaction Processing & Back Office</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.departments.internationalBanking}
+                                                onChange={() => handleFilterChange('departments', 'internationalBanking')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">International Banking</span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded px-2 py-1 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={filterOptions.departments.accountManagement}
+                                                onChange={() => handleFilterChange('departments', 'accountManagement')}
+                                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1"
+                                            />
+                                            <span className="ml-2 text-xs text-gray-700">Account Management</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Modal Footer */}
+                            <div className="flex justify-between items-center p-4 border-t border-gray-200">
+                                <button
+                                    onClick={clearFilters}
+                                    className="text-sm text-gray-600 hover:text-gray-800"
+                                >
+                                    Clear All
+                                </button>
+                                <button
+                                    onClick={applyFilters}
+                                    className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
+                                >
+                                    Show results
+                                </button>
                             </div>
                         </div>
                     </div>
