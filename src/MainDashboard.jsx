@@ -1,39 +1,50 @@
 import React, { useState, useRef, useEffect } from "react";
-import Sidebar from "./components/SideBar.jsx"; // Import from components folder with correct filename
+import Sidebar from "./components/SideBar.jsx";
+import TopNavigation from "./components/TopNavigation.jsx";
 
-const MainDashboard = ({ user, onLogout }) => {
+const MainDashboard = ({ user, onLogout, onNavigate }) => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-    const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
+    const [searchModalOpen, setSearchModalOpen] = useState(false);
+    const searchModalRef = useRef(null);
 
     const handleSidebarToggle = (collapsed) => {
         setSidebarCollapsed(collapsed);
     };
 
-    const toggleProfileDropdown = () => {
-        setProfileDropdownOpen(!profileDropdownOpen);
+    const openSearchModal = () => {
+        setSearchModalOpen(true);
     };
 
-    const handleDropdownOptionClick = (option) => {
-        setProfileDropdownOpen(false);
-        if (option === 'logout') {
-            onLogout();
+    const closeSearchModal = () => {
+        setSearchModalOpen(false);
+    };
+
+    const handleNavigationClick = (page) => {
+        console.log(`Navigating to: ${page}`);
+        if (onNavigate) {
+            onNavigate(page);
         }
-        // Handle other options as needed
-        console.log(`Selected: ${option}`);
     };
 
-    // Close dropdown when clicking outside
+    // Close search modal when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setProfileDropdownOpen(false);
+            if (searchModalRef.current && !searchModalRef.current.contains(event.target)) {
+                setSearchModalOpen(false);
+            }
+        };
+
+        const handleEscapeKey = (event) => {
+            if (event.key === 'Escape') {
+                setSearchModalOpen(false);
             }
         };
 
         document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleEscapeKey);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleEscapeKey);
         };
     }, []);
     return (
@@ -47,112 +58,11 @@ const MainDashboard = ({ user, onLogout }) => {
         }`}>
         
             {/* Top Navigation Bar */}
-            <header className="bg-blue-50 rounded-lg p-4 mb-6 flex items-center justify-between">
-                <div className="flex items-center space-x-6">
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
-                        <input
-                            type="text"
-                            placeholder="Search"
-                            className="block w-80 pl-10 pr-3 py-2 border-0 bg-white rounded-lg text-sm placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-blue-500"
-                        />
-                    </div>
-                </div>
-                <div className="flex items-center space-x-6">
-                    <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-1 px-2 py-1 bg-white rounded text-xs text-gray-600">
-                            <span></span>
-                            <span>2024-01-22</span>
-                        </div>
-                        <div className="flex items-center space-x-1 px-2 py-1 bg-white rounded text-xs text-gray-600">
-                            <span></span>
-                            <span>06:00:01</span>
-                        </div>
-                    </div>
-
-
-                    
-                    {/* Profile Dropdown */}
-                    <div className="relative" ref={dropdownRef}>
-                        <button
-                            onClick={toggleProfileDropdown}
-                            className="flex items-center space-x-3 px-3 py-2 bg-white rounded-lg border border-gray-200 transition-colors hover:shadow-md"
-                            style={{ 
-                                backgroundColor: profileDropdownOpen ? '#005B96' : '#FFFFFF'
-                            }}
-                            onMouseEnter={(e) => {
-                                if (!profileDropdownOpen) {
-                                    e.currentTarget.style.backgroundColor = '#005B96';
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (!profileDropdownOpen) {
-                                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                                }
-                            }}
-                        >
-                            {/* Profile Image/Avatar */}
-                            <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
-                                {/* You can replace this with an actual image */}
-                                <img 
-                                    src="https://images.unsplash.com/photo-1494790108755-2616b612b602?w=150&h=150&fit=crop&crop=face" 
-                                    alt="Profile" 
-                                    className="w-full h-full object-cover"
-                                />
-                                {/* Fallback if no image */}
-                                {/* <div className="w-full h-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
-                                    {user?.userId ? user.userId.charAt(0).toUpperCase() : 'U'}
-                                </div> */}
-                            </div>
-                            
-                            {/* Dropdown Arrow */}
-                            <svg 
-                                className={`w-4 h-4 transition-all duration-200 ${
-                                    profileDropdownOpen ? 'rotate-180' : ''
-                                }`}
-                                style={{ 
-                                    color: profileDropdownOpen ? '#FFFFFF' : '#9CA3AF'
-                                }}
-                                fill="none" 
-                                stroke="currentColor" 
-                                viewBox="0 0 24 24"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-
-                        {/* Dropdown Menu */}
-                        {profileDropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
-                                <button
-                                    onClick={() => handleDropdownOptionClick('account')}
-                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                    My Account
-                                </button>
-                                <button
-                                    onClick={() => handleDropdownOptionClick('support')}
-                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                    Help & Support
-                                </button>
-                                <hr className="my-1 border-gray-200" />
-                                <button
-                                    onClick={() => handleDropdownOptionClick('logout')}
-                                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                                >
-                                    Log Out
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-                
-            </header>
+            <TopNavigation 
+                user={user} 
+                onLogout={onLogout} 
+                onSearchClick={openSearchModal} 
+            />
 
             {/* Banking Services Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -161,7 +71,7 @@ const MainDashboard = ({ user, onLogout }) => {
                     <div className="flex justify-end mb-4">
                         <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
                             <img 
-                                src="/assets/logos/gcb-logo.svg" 
+                                src="/assets/logos/gcb-logo.png" 
                                 alt="GCB" 
                                 className="w-8 h-8 object-contain"
                                 onError={(e) => {
@@ -379,6 +289,74 @@ const MainDashboard = ({ user, onLogout }) => {
                     </p>
                 </div>
             </div>
+
+            {/* Floating Navigation Dots - Right Side */}
+            <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40">
+                <div className="flex flex-col space-y-4">
+                    <button
+                        onClick={() => handleNavigationClick('dashboard')}
+                        className="w-3 h-3 bg-blue-500 hover:bg-blue-600 rounded-full transition-colors shadow-lg ring-2 ring-blue-300"
+                        title="Dashboard"
+                    ></button>
+                    <button
+                        onClick={() => handleNavigationClick('overview')}
+                        className="w-3 h-3 bg-green-500 hover:bg-green-600 rounded-full transition-colors shadow-lg"
+                        title="Overview"
+                    ></button>
+                    <button
+                        onClick={() => handleNavigationClick('reports')}
+                        className="w-3 h-3 bg-purple-500 hover:bg-purple-600 rounded-full transition-colors shadow-lg"
+                        title="Reports"
+                    ></button>
+                </div>
+            </div>
+
+            {/* Search Modal/Overlay */}
+            {searchModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div ref={searchModalRef} className="bg-white rounded-2xl shadow-2xl max-w-lg w-full relative">
+                        {/* Close Button */}
+                        <button
+                            onClick={closeSearchModal}
+                            className="absolute -top-2 -right-2 w-8 h-8 bg-gray-400 text-white rounded-full hover:bg-gray-700 transition-colors flex items-center justify-center"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+
+                        {/* Search Input */}
+                        <div className="p-6 border-b border-gray-100">
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Search"
+                                    autoFocus
+                                    className="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Search Content */}
+                        <div className="p-8 min-h-[300px] flex flex-col items-center justify-center text-center">
+                            <div className="mb-6">
+                                <svg className="w-16 h-16 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                            <p className="text-gray-500 text-sm leading-relaxed">
+                                Find sub banking systems by name and add them to your<br />
+                                homescreen for easy access
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
         </div>
