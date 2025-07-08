@@ -5,7 +5,10 @@ import TopNavigation from "./components/TopNavigation.jsx";
 const Overview = ({ user, onLogout, onNavigate }) => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
     const [searchModalOpen, setSearchModalOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('overview');
+    const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
     const searchModalRef = useRef(null);
+    const sortDropdownRef = useRef(null);
 
     const handleSidebarToggle = (collapsed) => {
         setSidebarCollapsed(collapsed);
@@ -17,6 +20,20 @@ const Overview = ({ user, onLogout, onNavigate }) => {
 
     const closeSearchModal = () => {
         setSearchModalOpen(false);
+    };
+
+    const toggleSortDropdown = () => {
+        setSortDropdownOpen(!sortDropdownOpen);
+    };
+
+    const closeSortDropdown = () => {
+        setSortDropdownOpen(false);
+    };
+
+    const handleSortOption = (option) => {
+        console.log(`Selected sort option: ${option}`);
+        closeSortDropdown();
+        // Here you can implement the actual sorting logic
     };
 
     const handleNavigationClick = (page) => {
@@ -32,11 +49,15 @@ const Overview = ({ user, onLogout, onNavigate }) => {
             if (searchModalRef.current && !searchModalRef.current.contains(event.target)) {
                 setSearchModalOpen(false);
             }
+            if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target)) {
+                setSortDropdownOpen(false);
+            }
         };
 
         const handleEscapeKey = (event) => {
             if (event.key === 'Escape') {
                 setSearchModalOpen(false);
+                setSortDropdownOpen(false);
             }
         };
 
@@ -68,41 +89,114 @@ const Overview = ({ user, onLogout, onNavigate }) => {
                 {/* Navigation Tabs */}
                 <div className="mb-6">
                     <div className="flex space-x-1 bg-white rounded-lg p-1 shadow-sm">
-                        <button className="px-4 py-2 bg-blue-500 text-white rounded-md text-sm font-medium">
+                        <button 
+                            onClick={() => setActiveTab('overview')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                activeTab === 'overview' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'text-gray-600 hover:text-gray-800'
+                            }`}
+                        >
                             Overview
                         </button>
-                        <button className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md text-sm font-medium">
+                        <button 
+                            onClick={() => setActiveTab('users')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                activeTab === 'users' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'text-gray-600 hover:text-gray-800'
+                            }`}
+                        >
                             Users
                         </button>
-                        <button className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md text-sm font-medium">
+                        <button 
+                            onClick={() => setActiveTab('departments')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                activeTab === 'departments' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'text-gray-600 hover:text-gray-800'
+                            }`}
+                        >
                             Departments
                         </button>
-                        <button className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md text-sm font-medium">
+                        <button 
+                            onClick={() => setActiveTab('branches')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                activeTab === 'branches' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'text-gray-600 hover:text-gray-800'
+                            }`}
+                        >
                             Branches
                         </button>
-                        <button className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md text-sm font-medium">
+                        <button 
+                            onClick={() => setActiveTab('services')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                activeTab === 'services' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'text-gray-600 hover:text-gray-800'
+                            }`}
+                        >
                             Services
                         </button>
-                        <button className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md text-sm font-medium">
+                        <button 
+                            onClick={() => setActiveTab('revenue')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                activeTab === 'revenue' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'text-gray-600 hover:text-gray-800'
+                            }`}
+                        >
                             Revenue
                         </button>
-                        <button className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md text-sm font-medium">
+                        <button 
+                            onClick={() => setActiveTab('security')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                activeTab === 'security' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'text-gray-600 hover:text-gray-800'
+                            }`}
+                        >
                             Security
                         </button>
-                        <button className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md text-sm font-medium">
+                        <button 
+                            onClick={() => setActiveTab('transactions')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                activeTab === 'transactions' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'text-gray-600 hover:text-gray-800'
+                            }`}
+                        >
                             Transactions
                         </button>
-                        <button className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md text-sm font-medium">
+                        <button 
+                            onClick={() => setActiveTab('logs')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                activeTab === 'logs' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'text-gray-600 hover:text-gray-800'
+                            }`}
+                        >
                             Logs & Reports
                         </button>
-                        <button className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md text-sm font-medium">
+                        <button 
+                            onClick={() => setActiveTab('notifications')}
+                            className={`px-4 py-2 rounded-md text-sm font-medium ${
+                                activeTab === 'notifications' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'text-gray-600 hover:text-gray-800'
+                            }`}
+                        >
                             Notifications
                         </button>
                     </div>
                 </div>
 
-                {/* System Overview Section */}
-                <div className="bg-white rounded-lg p-6 mb-6 shadow-sm">
+                {/* Tab Content */}
+                {activeTab === 'overview' && (
+                    <>
+                        {/* System Overview Section */}
+                        <div className="bg-white rounded-lg p-6 mb-6 shadow-sm">
                     <h2 className="text-lg font-semibold text-gray-800 mb-2">System Overview</h2>
                     <p className="text-sm text-gray-600 mb-6">Track users, approvals, deposits and withdrawals in real time.</p>
                     
@@ -231,23 +325,520 @@ const Overview = ({ user, onLogout, onNavigate }) => {
                 </div>
 
                 {/* Bottom Section */}
-                <div className="grid grid-cols-2 gap-6">
-                    {/* Pending Approvals */}
-                    <div className="bg-white rounded-lg p-6 shadow-sm">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Pending Approvals</h3>
-                        <div className="h-32 bg-gray-50 rounded-lg flex items-center justify-center">
-                            <div className="text-gray-400 text-sm">Pending Approvals List</div>
+                <div className="grid grid-cols-3 gap-6">
+                    {/* Pending Approvals - Takes up 2 columns */}
+                    <div className="col-span-2 bg-white rounded-lg p-6 shadow-sm">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-semibold text-gray-800">Pending Approvals</h3>
+                            <p className="text-sm text-gray-500">View loan requests, high-value transfers, or any approvals pending admin action</p>
+                        </div>
+                        
+                        <div className="w-full">
+                            <table className="w-full text-xs">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">ID</th>
+                                        <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">User</th>
+                                        <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">Type</th>
+                                        <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">Amount</th>
+                                        <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">Status</th>
+                                        <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td className="px-2 py-2 text-xs text-gray-900">REQ001</td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">
+                                            <div className="truncate" title="Nana Yaw Osei Appomasu Assante">Nana Yaw Osei...</div>
+                                        </td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">Loan Request</td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">15,000</td>
+                                        <td className="px-2 py-2">
+                                            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-1"></div>
+                                                Pending
+                                            </span>
+                                        </td>
+                                        <td className="px-2 py-2 text-xs">
+                                            <div className="flex space-x-1">
+                                                <button className="text-green-600 hover:text-green-900" title="Approve">
+                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </button>
+                                                <button className="text-red-600 hover:text-red-900" title="Reject">
+                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-2 py-2 text-xs text-gray-900">REQ002</td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">
+                                            <div className="truncate" title="Aloma Serwaa Boateng">Aloma Serwaa...</div>
+                                        </td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">Credit Card App</td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">5,500</td>
+                                        <td className="px-2 py-2">
+                                            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-1"></div>
+                                                Pending
+                                            </span>
+                                        </td>
+                                        <td className="px-2 py-2 text-xs">
+                                            <div className="flex space-x-1">
+                                                <button className="text-green-600 hover:text-green-900" title="Approve">
+                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </button>
+                                                <button className="text-red-600 hover:text-red-900" title="Reject">
+                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-2 py-2 text-xs text-gray-900">REQ003</td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">
+                                            <div className="truncate" title="Kofi Owusu Mensah">Kofi Owusu...</div>
+                                        </td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">Transfer</td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">25,000</td>
+                                        <td className="px-2 py-2">
+                                            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-1"></div>
+                                                Pending
+                                            </span>
+                                        </td>
+                                        <td className="px-2 py-2 text-xs">
+                                            <div className="flex space-x-1">
+                                                <button className="text-green-600 hover:text-green-900" title="Approve">
+                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </button>
+                                                <button className="text-red-600 hover:text-red-900" title="Reject">
+                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-2 py-2 text-xs text-gray-900">REQ004</td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">
+                                            <div className="truncate" title="Akosua Adjei Danso">Akosua Adjei...</div>
+                                        </td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">Transfer</td>
+                                        <td className="px-2 py-2 text-xs text-gray-900">2,500</td>
+                                        <td className="px-2 py-2">
+                                            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-1"></div>
+                                                Pending
+                                            </span>
+                                        </td>
+                                        <td className="px-2 py-2 text-xs">
+                                            <div className="flex space-x-1">
+                                                <button className="text-green-600 hover:text-green-900" title="Approve">
+                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </button>
+                                                <button className="text-red-600 hover:text-red-900" title="Reject">
+                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
-                    {/* Recent Activities */}
-                    <div className="bg-white rounded-lg p-6 shadow-sm">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Activities</h3>
-                        <div className="h-32 bg-gray-50 rounded-lg flex items-center justify-center">
-                            <div className="text-gray-400 text-sm">Recent Activities List</div>
+                    {/* Recent Activities - Takes up 1 column */}
+                    <div className="col-span-1 bg-white rounded-lg p-6 shadow-sm">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-semibold text-gray-800">Recent Activities</h3>
+                            <p className="text-sm text-gray-500">View user activities, flagged activities, departmental changes or updates</p>
+                        </div>
+                        
+                        <div className="space-y-4">
+                            <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                                <div className="flex-shrink-0">
+                                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm font-medium text-gray-900">New user added to system</p>
+                                        <button className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">Details</button>
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">3 minutes ago</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                                <div className="flex-shrink-0">
+                                    <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                                        <svg className="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm font-medium text-gray-900">Multiple failed login attempts detected</p>
+                                        <button className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">Details</button>
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">7 minutes ago</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                                <div className="flex-shrink-0">
+                                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm font-medium text-gray-900">Samuel Obeng logged in from Accra, Ghana</p>
+                                        <button className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">Details</button>
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">15 minutes ago</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                                <div className="flex-shrink-0">
+                                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                        <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm font-medium text-gray-900">Grace Adjoa updated her profile information</p>
+                                        <button className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">Details</button>
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">2 minutes ago</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                                <div className="flex-shrink-0">
+                                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm font-medium text-gray-900">GHC5000 transferred from ACC: 1920239910 to...</p>
+                                        <button className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">Details</button>
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">5 minutes ago</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                    </>
+                )}
+
+                {/* Users Tab Content */}
+                {activeTab === 'users' && (
+                    <div className="bg-white rounded-lg p-6 shadow-sm">
+                        {/* Users Page Header */}
+                        <div className="mb-6">
+                            <div className="flex justify-between items-center mb-4">
+                            <div className="flex items-center space-x-2">
+                                <span className="text-sm text-gray-600">Rows</span>
+                                <select className="border border-gray-300 rounded px-2 py-1 text-sm">
+                                    <option>7</option>
+                                    <option>10</option>
+                                    <option>25</option>
+                                    <option>50</option>
+                                </select>
+                            </div>
+                                <div className="flex items-center space-x-2">
+                                    <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                                        Filter
+                                    </button>
+                                    <div className="relative" ref={sortDropdownRef}>
+                                        <button 
+                                            onClick={toggleSortDropdown}
+                                            className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 flex items-center space-x-1"
+                                        >
+                                            <span>Sort by</span>
+                                            <svg className={`w-4 h-4 transition-transform ${sortDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
+                                        
+                                        {sortDropdownOpen && (
+                                            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                                                <div className="py-1">
+                                                    <button
+                                                        onClick={() => handleSortOption('User ID/Acc. No.')}
+                                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        User ID/Acc. No.
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleSortOption('Full Name')}
+                                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        Full Name
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleSortOption('Role')}
+                                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        Role
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleSortOption('Branch')}
+                                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        Branch
+                                                    </button>
+                                                    <hr className="my-1 border-gray-200" />
+                                                    <button
+                                                        onClick={() => handleSortOption('Ascending')}
+                                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        Ascending
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleSortOption('Descending')}
+                                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        Descending
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <button className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">
+                                        New User
+                                    </button>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        {/* Users Table */}
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User ID/ Acc. No.</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Branch</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">102403008556</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Quateah, Ewuraba</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Super Admin</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Kumasi Branch</td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">ewurabaquateah@gmail.com</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0500877524</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                            <button className="text-blue-600 hover:text-blue-900">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">102401923617</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Agyeman, Kwame</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Account Holder</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Kumasi Branch</td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">kwameagyeman@gmail.com</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0501234567</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                            <button className="text-blue-600 hover:text-blue-900">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">192229376812</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Mensah, Akosua</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">System Administrator</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Kumasi Branch</td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">akosuamensah@gcb.com.gh</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0567654321</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                            <button className="text-blue-600 hover:text-blue-900">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">103407412540</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Boateng, Michael</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Account Holder</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Kumasi Branch</td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">michaelboateng78@gmail.com</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0247896541</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                            <button className="text-blue-600 hover:text-blue-900">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">180788269541</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Owusu, Lydia</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Auditor</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Takoradi Branch</td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                <div className="w-2 h-2 bg-red-500 rounded-full mr-1"></div>
+                                                Blacklisted
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">lydiaowusu@gcb.com.gh</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0550012345</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                            <button className="text-blue-600 hover:text-blue-900">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">174449184532</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Frimpong, Nana Yaw</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Teller</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Tamale Branch</td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">nanayawfrimpong@gcb.com.gh</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0201122334</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                            <button className="text-blue-600 hover:text-blue-900">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">165019376124</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Dankwa, Grace</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Software Developer</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Tamale Branch</td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">gracedankwa@gcb.com.gh</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">0509988776</td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                            <button className="text-blue-600 hover:text-blue-900">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Pagination */}
+                        <div className="flex items-center justify-between mt-6">
+                            <div className="text-sm text-gray-700">
+                                Showing 1 - 7 of 2,956 results
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50">
+                                    &lt;
+                                </button>
+                                <button className="px-3 py-1 text-sm bg-blue-500 text-white rounded">
+                                    1
+                                </button>
+                                <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                                    2
+                                </button>
+                                <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                                    3
+                                </button>
+                                <span className="px-3 py-1 text-sm text-gray-500">...</span>
+                                <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                                    423
+                                </button>
+                                <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Floating Navigation Dots - Right Side */}
                 <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40">
