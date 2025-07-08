@@ -341,11 +341,11 @@ const Overview = ({ user, onLogout, onNavigate }) => {
             )}
 
             {/* Main Content Area */}
-            <div className={`flex-1 overflow-y-auto p-6 transition-all duration-300 ease-in-out ${
+            <div className={`flex-1 p-6 transition-all duration-300 ease-in-out ${
                 activeTab === 'users' 
                     ? (usersSidebarCollapsed ? "ml-24" : "ml-72")
                     : (sidebarCollapsed ? "ml-24" : "ml-72")
-            }`}>
+            } ${activeTab === 'users' ? 'overflow-hidden' : 'overflow-y-auto'}`}>
                 
                 {/* Top Navigation Bar */}
                 <TopNavigation 
@@ -831,9 +831,9 @@ const Overview = ({ user, onLogout, onNavigate }) => {
 
                 {/* Users Tab Content */}
                 {activeTab === 'users' && (
-                    <div className="bg-white rounded-lg p-6 shadow-sm">
-                        {/* Users Page Header */}
-                        <div className="mb-6">
+                    <div className="bg-white rounded-lg p-6 shadow-sm flex flex-col h-[calc(100vh-200px)]">
+                        {/* Users Page Header - Fixed */}
+                        <div className="flex-shrink-0 mb-6">
                             <div className="flex justify-between items-center mb-4">
                                 <div className="flex items-center space-x-4">
                                     <h2 className="text-xl font-semibold text-gray-800">{selectedUsersFilter}</h2>
@@ -930,71 +930,80 @@ const Overview = ({ user, onLogout, onNavigate }) => {
                             
                         </div>
 
-                        {/* Users Table */}
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User ID/ Acc. No.</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Branch</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {displayedUsers.map((user, index) => (
-                                        <tr key={user.id}>
-                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.id}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.name}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.role}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.branch}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap">
-                                                {renderStatusBadge(user.status)}
-                                            </td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.email}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.phone}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-sm">
-                                                <button className="text-blue-600 hover:text-blue-900">
-                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                    </svg>
-                                                </button>
-                                            </td>
+                        {/* Users Table Container - Flexible */}
+                        <div className="flex flex-col flex-1 min-h-0">
+                            {/* Table Header - Fixed */}
+                            <div className="flex-shrink-0 overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User ID/ Acc. No.</th>
+                                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
+                                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Branch</th>
+                                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+                                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {/* Pagination */}
-                        <div className="flex items-center justify-between mt-6">
-                            <div className="text-sm text-gray-700">
-                                Showing 1 - {displayedUsers.length} of {usersData.length} results
+                                    </thead>
+                                </table>
                             </div>
-                            <div className="flex items-center space-x-2">
-                                <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50">
-                                    &lt;
-                                </button>
-                                <button className="px-3 py-1 text-sm bg-blue-500 text-white rounded">
-                                    1
-                                </button>
-                                <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
-                                    2
-                                </button>
-                                <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
-                                    3
-                                </button>
-                                <span className="px-3 py-1 text-sm text-gray-500">...</span>
-                                <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
-                                    423
-                                </button>
-                                <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
-                                    &gt;
-                                </button>
+
+                            {/* Scrollable Table Body */}
+                            <div className="flex-1 overflow-y-auto min-h-0">
+                                <table className="w-full text-sm">
+                                    <tbody className="bg-white divide-y divide-gray-200">
+                                        {displayedUsers.map((user, index) => (
+                                            <tr key={user.id}>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.id}</td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.name}</td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.role}</td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.branch}</td>
+                                                <td className="px-4 py-3 whitespace-nowrap">
+                                                    {renderStatusBadge(user.status)}
+                                                </td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.email}</td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{user.phone}</td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                                    <button className="text-blue-600 hover:text-blue-900">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                        </svg>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Fixed Pagination */}
+                            <div className="flex-shrink-0 flex items-center justify-between mt-6 pt-4 border-t border-gray-200 bg-white">
+                                <div className="text-sm text-gray-700">
+                                    Showing 1 - {displayedUsers.length} of {usersData.length} results
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50">
+                                        &lt;
+                                    </button>
+                                    <button className="px-3 py-1 text-sm bg-blue-500 text-white rounded">
+                                        1
+                                    </button>
+                                    <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                                        2
+                                    </button>
+                                    <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                                        3
+                                    </button>
+                                    <span className="px-3 py-1 text-sm text-gray-500">...</span>
+                                    <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                                        423
+                                    </button>
+                                    <button className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                                        &gt;
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
