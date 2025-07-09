@@ -932,10 +932,10 @@ const Overview = ({ user, onLogout, onNavigate }) => {
 
                         {/* Users Table Container - Flexible */}
                         <div className="flex flex-col flex-1 min-h-0">
-                            {/* Table Header - Fixed */}
-                            <div className="flex-shrink-0 overflow-x-auto">
+                            {/* Unified Table with Fixed Header */}
+                            <div className="flex-1 overflow-y-auto min-h-0">
                                 <table className="w-full text-sm">
-                                    <thead className="bg-gray-50">
+                                    <thead className="bg-gray-50 sticky top-0 z-10">
                                         <tr>
                                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User ID/ Acc. No.</th>
                                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
@@ -947,12 +947,6 @@ const Overview = ({ user, onLogout, onNavigate }) => {
                                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                         </tr>
                                     </thead>
-                                </table>
-                            </div>
-
-                            {/* Scrollable Table Body */}
-                            <div className="flex-1 overflow-y-auto min-h-0">
-                                <table className="w-full text-sm">
                                     <tbody className="bg-white divide-y divide-gray-200">
                                         {displayedUsers.map((user, index) => (
                                             <tr key={user.id}>
