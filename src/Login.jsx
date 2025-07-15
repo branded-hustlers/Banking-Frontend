@@ -55,8 +55,6 @@ export default function Login({ onLogin, onBackToHome, onForgotPassword }) {
       {/* Centered Login Box */}
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl p-10 w-full max-w-md">
-          {" "}
-          {/* Increased from max-w-md to max-w-lg */}
           {/* Heading */}
           <h2 className="text-2xl font-bold text-[#333333] mb-6 text-left">
             Log In
